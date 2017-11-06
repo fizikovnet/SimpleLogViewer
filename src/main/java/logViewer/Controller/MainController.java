@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Callback;
+import logViewer.Containers.ThreadContainer;
 import logViewer.Model.Entry;
 import logViewer.Services.ParserFileService;
 
@@ -44,13 +45,16 @@ public class MainController {
     public CheckBox fltrLevelINFO;
     public CheckBox fltrLevelALL;
     public CheckBox fltrLevelTRACE;
+    public ChoiceBox<String> fltrChoiceThread;
 
-    private ObservableList<Entry> entries = FXCollections.observableArrayList();
+    private ObservableList<Entry> allEntries = FXCollections.observableArrayList();
 
     private HashMap<String, Boolean> levelStatusFilter = new HashMap<>();
     final FileChooser fileChooser = new FileChooser();
 
     public static AtomicInteger counter = new AtomicInteger(0);
+    public static final ThreadContainer threadContainer = new ThreadContainer();
+    private FilteredList<Entry> filteredData;
 
     ParserFileService parserFileService = new ParserFileService();
 
@@ -76,6 +80,9 @@ public class MainController {
                 (observable, oldValue, newValue) ->
                         fullMessage.setText((newValue != null) ? newValue.toString() + newValue.getFullMessage() : "")
         );
+        fltrChoiceThread.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> filterTableByThread(newValue)
+        );
 
         addListenersForLevelsCheckboxes();
         setSettingsForTable();
@@ -85,13 +92,14 @@ public class MainController {
         Window stage = mainMenu.getScene().getWindow();
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
-            parserFileService.performFile(file, entries);
+            parserFileService.performFile(file, allEntries);
         }
-        mainTable.setItems(entries);
+        filteredData = new FilteredList<>(allEntries);
+        mainTable.setItems(filteredData);
+        fltrChoiceThread.setItems(FXCollections.observableArrayList(threadContainer.getThreads()));
     }
 
     private void filterTable(Boolean checked, String level) {
-        FilteredList<Entry> filteredData = new FilteredList<>(entries);
         levelStatusFilter.put(level, checked);
         filteredData.setPredicate((row) -> {
 
@@ -109,12 +117,26 @@ public class MainController {
         mainTable.setItems(filteredData);
     }
 
+    private void filterTableByThread(String thread) {
+        if (thread.equals("ALL")) {
+            mainTable.setItems(filteredData);
+        } else {
+            filteredData.setPredicate((row) -> {
+                if (row.getThread().equals(thread)) {
+                    return true;
+                }
+                return false;
+            });
+            mainTable.setItems(filteredData);
+        }
+    }
+
     private void resetLevelFilter() {
         fltrLevelERR.setSelected(false);
         fltrLevelDEBUG.setSelected(false);
         fltrLevelINFO.setSelected(false);
         fltrLevelWARN.setSelected(false);
-        mainTable.setItems(entries);
+        mainTable.setItems(allEntries);
     }
 
     private void addListenersForLevelsCheckboxes() {

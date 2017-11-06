@@ -3,11 +3,15 @@ package logViewer.Services;
 import javafx.collections.ObservableList;
 import logViewer.Model.Entry;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import static logViewer.Controller.MainController.counter;
+import static logViewer.Controller.MainController.threadContainer;
 
 /**
  * Created by artem on 05.11.2017.
@@ -83,6 +87,7 @@ public class ParserFileService {
         if (m.find()) {
             msg = m.group(1);
         }
+        threadContainer.addThread(thread);
 
         return new Entry(counter.getAndIncrement(), time, level, clazz, thread, msg);
     }

@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -94,6 +95,12 @@
                         <Insets />
                      </VBox.margin>
                   </GridPane>
+                  <Label prefHeight="20.0" prefWidth="87.0" text="Thread Filter" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                  </Label>
+                  <ChoiceBox fx:id="fltrChoiceThread" prefWidth="150.0" />
                </children>
                <padding>
                   <Insets left="10.0" />
