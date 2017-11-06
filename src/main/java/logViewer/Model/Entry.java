@@ -97,6 +97,10 @@ public class Entry {
         this.fullMessage = fullMessage;
     }
 
+    public Timestamp getDatetime() {
+        return datetime;
+    }
+
     public String getDateString() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         return sdf.format(this.datetime);

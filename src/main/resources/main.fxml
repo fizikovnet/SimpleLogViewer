@@ -18,6 +18,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import jfxtras.scene.control.LocalDateTimeTextField?>
 
 <VBox prefHeight="589.0" prefWidth="900.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logViewer.Controller.MainController">
   <children>
@@ -92,7 +93,7 @@
                         <CheckBox fx:id="fltrLevelALL" mnemonicParsing="false" text="All Levels" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                      </children>
                      <VBox.margin>
-                        <Insets />
+                        <Insets left="5.0" />
                      </VBox.margin>
                   </GridPane>
                   <Label prefHeight="20.0" prefWidth="87.0" text="Thread Filter" textAlignment="CENTER">
@@ -101,10 +102,42 @@
                      </font>
                   </Label>
                   <ChoiceBox fx:id="fltrChoiceThread" prefWidth="150.0" />
+                  <Label prefHeight="20.0" prefWidth="87.0" text="Time Filter" textAlignment="CENTER">
+                     <font>
+                        <Font name="System Bold" size="14.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="10.0" />
+                     </VBox.margin>
+                  </Label>
+                  <GridPane>
+                    <columnConstraints>
+                      <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="83.0" minWidth="10.0" prefWidth="40.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" maxWidth="142.0" minWidth="10.0" prefWidth="142.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Before:" />
+                        <Label text="After:" GridPane.rowIndex="1" />
+                        <LocalDateTimeTextField fx:id="fltrTimeBefore" GridPane.columnIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" top="2.0" />
+                           </GridPane.margin>
+                        </LocalDateTimeTextField>
+                        <LocalDateTimeTextField fx:id="fltrTimeAfter" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets left="5.0" top="2.0" />
+                           </GridPane.margin>
+                        </LocalDateTimeTextField>
+                     </children>
+                     <VBox.margin>
+                        <Insets />
+                     </VBox.margin>
+                  </GridPane>
                </children>
-               <padding>
-                  <Insets left="10.0" />
-               </padding>
             </VBox>
             <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="493.0" prefWidth="670.0">
                      <children>

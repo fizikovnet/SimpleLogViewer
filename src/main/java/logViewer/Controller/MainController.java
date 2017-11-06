@@ -9,11 +9,16 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Callback;
+import jfxtras.scene.control.LocalDateTimeTextField;
 import logViewer.Containers.ThreadContainer;
 import logViewer.Model.Entry;
 import logViewer.Services.ParserFileService;
 
 import java.io.File;
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,6 +52,8 @@ public class MainController {
     public CheckBox fltrLevelTRACE;
     public ChoiceBox<String> fltrChoiceThread;
     public TableColumn<Entry, String> clmDate;
+    public LocalDateTimeTextField fltrTimeAfter;
+    public LocalDateTimeTextField fltrTimeBefore;
 
     private ObservableList<Entry> allEntries = FXCollections.observableArrayList();
 
@@ -85,6 +92,8 @@ public class MainController {
         fltrChoiceThread.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> filterTableByThread(newValue)
         );
+        fltrTimeAfter.textProperty().addListener((observable, oldValue, newValue) -> filterTableByAfterTime(newValue));
+        fltrTimeBefore.textProperty().addListener((observable, oldValue, newValue) -> filterTableByBeforeTime(newValue));
 
         addListenersForLevelsCheckboxes();
         setSettingsForTable();
@@ -130,6 +139,48 @@ public class MainController {
                 return false;
             });
             mainTable.setItems(filteredData);
+        }
+    }
+
+    private void filterTableByAfterTime(String time) {
+        if (time.equals("")) {
+            //ToDo It's not correct
+            mainTable.setItems(allEntries);
+            return;
+        }
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            Timestamp ts = new Timestamp(dateFormat.parse(time).getTime());
+            filteredData.setPredicate((row) -> {
+                if (row.getDatetime().after(ts)) {
+                    return true;
+                }
+                return false;
+            });
+            mainTable.setItems(filteredData);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void filterTableByBeforeTime(String time) {
+        if (time.equals("")) {
+            //ToDo It's not correct
+            mainTable.setItems(allEntries);
+            return;
+        }
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+            Timestamp ts = new Timestamp(dateFormat.parse(time).getTime());
+            filteredData.setPredicate((row) -> {
+                if (row.getDatetime().before(ts)) {
+                    return true;
+                }
+                return false;
+            });
+            mainTable.setItems(filteredData);
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
