@@ -4,6 +4,12 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * Created by artem on 05.11.2017.
  */
@@ -16,6 +22,13 @@ public class Entry {
         this.clazz = new SimpleStringProperty(clazz);
         this.thread = new SimpleStringProperty(thread);
         this.message = new SimpleStringProperty(message);
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss:SSS");
+        try {
+            Date date = dateFormat.parse(time);
+            this.datetime = new Timestamp(date.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     private final SimpleIntegerProperty id;
@@ -24,6 +37,7 @@ public class Entry {
     private final StringProperty clazz;
     private final StringProperty thread;
     private final StringProperty message;
+    private Timestamp datetime = null;
     private String fullMessage = "";
 
     public int getId() {
@@ -81,6 +95,16 @@ public class Entry {
 
     public void setFullMessage(String fullMessage) {
         this.fullMessage = fullMessage;
+    }
+
+    public String getDateString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        return sdf.format(this.datetime);
+    }
+
+    public String getTimeString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss:SSS");
+        return sdf.format(this.datetime);
     }
 
     @Override
