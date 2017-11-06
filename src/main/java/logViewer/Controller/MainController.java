@@ -46,6 +46,7 @@ public class MainController {
     public CheckBox fltrLevelALL;
     public CheckBox fltrLevelTRACE;
     public ChoiceBox<String> fltrChoiceThread;
+    public TableColumn<Entry, String> clmDate;
 
     private ObservableList<Entry> allEntries = FXCollections.observableArrayList();
 
@@ -68,7 +69,8 @@ public class MainController {
 
     @FXML
     private void initialize() {
-        clmTime.setCellValueFactory(cell -> cell.getValue().timeProperty());
+        clmDate.setCellValueFactory(cell -> cell.getValue().getDateProperty());
+        clmTime.setCellValueFactory(cell -> cell.getValue().getTimeProperty());
         clmLevel.setCellValueFactory(cell -> cell.getValue().levelProperty());
         clmClass.setCellValueFactory(cell -> cell.getValue().clazzProperty());
         clmThread.setCellValueFactory(cell -> cell.getValue().threadProperty());

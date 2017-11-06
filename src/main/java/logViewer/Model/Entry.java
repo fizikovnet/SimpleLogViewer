@@ -17,7 +17,7 @@ public class Entry {
 
     public Entry(int id, String time, String level, String clazz, String thread, String message) {
         this.id = new SimpleIntegerProperty(id);
-        this.time = new SimpleStringProperty(time);
+        this.originaTimeString = time;
         this.level = new SimpleStringProperty(level);
         this.clazz = new SimpleStringProperty(clazz);
         this.thread = new SimpleStringProperty(thread);
@@ -32,7 +32,7 @@ public class Entry {
     }
 
     private final SimpleIntegerProperty id;
-    private final StringProperty time;
+    private final String originaTimeString;
     private final StringProperty level;
     private final StringProperty clazz;
     private final StringProperty thread;
@@ -48,12 +48,12 @@ public class Entry {
         return id;
     }
 
-    public String getTime() {
-        return time.get();
+    public SimpleStringProperty getTimeProperty() {
+        return new SimpleStringProperty(getTimeString());
     }
 
-    public StringProperty timeProperty() {
-        return time;
+    public SimpleStringProperty getDateProperty() {
+        return new SimpleStringProperty(getDateString());
     }
 
     public String getLevel() {
@@ -109,6 +109,6 @@ public class Entry {
 
     @Override
     public String toString() {
-        return time.getValue() + ' ' + level.getValue() + ' ' + thread.getValue() + ' ' + clazz.getValue() + ' ' + message.getValue();
+        return originaTimeString + ' ' + level.getValue() + ' ' + thread.getValue() + ' ' + clazz.getValue() + ' ' + message.getValue();
     }
 }

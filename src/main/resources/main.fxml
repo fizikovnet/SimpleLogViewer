@@ -110,6 +110,7 @@
                      <children>
                         <TableView fx:id="mainTable" prefHeight="436.0" prefWidth="678.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
+                            <TableColumn fx:id="clmDate" prefWidth="75.0" text="Date" />
                             <TableColumn fx:id="clmTime" prefWidth="75.0" text="Time" />
                             <TableColumn fx:id="clmLevel" prefWidth="75.0" text="Level" />
                             <TableColumn fx:id="clmClass" prefWidth="75.0" text="Class" />
