@@ -20,7 +20,7 @@
 <?import javafx.scene.text.Font?>
 <?import jfxtras.scene.control.LocalDateTimeTextField?>
 
-<VBox prefHeight="589.0" prefWidth="900.0" stylesheets="@main.css" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logViewer.Controller.MainController">
+<VBox prefHeight="589.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="logViewer.Controller.MainController">
   <children>
     <MenuBar fx:id="mainMenu" VBox.vgrow="NEVER">
       <menus>
@@ -117,7 +117,7 @@
             </VBox>
             <AnchorPane id="Content" minHeight="-1.0" minWidth="-1.0" prefHeight="493.0" prefWidth="670.0">
                      <children>
-                        <TableView fx:id="mainTable" prefHeight="436.0" prefWidth="678.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                        <TableView fx:id="mainTable" prefHeight="436.0" prefWidth="678.0" AnchorPane.bottomAnchor="150.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" stylesheets="@mainTable.css" >
                           <columns>
                             <TableColumn fx:id="clmDate" prefWidth="75.0" text="Date" />
                             <TableColumn fx:id="clmTime" prefWidth="75.0" text="Time" />

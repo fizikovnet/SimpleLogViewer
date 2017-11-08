@@ -1,0 +1,8 @@
+.table-view .table-row-cell:selected {
+    -fx-text-fill: #fff!important;
+}
+.table-view .table-row-cell:focused {
+    -fx-font-weight: 700!important;
+    -fx-text-fill: #fff!important;
+    -fx-background-color: #c0c0c0!important;
+}

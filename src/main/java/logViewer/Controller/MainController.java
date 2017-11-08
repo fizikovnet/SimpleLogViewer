@@ -21,6 +21,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class MainController {
@@ -101,10 +102,8 @@ public class MainController {
 
     public void openFile(ActionEvent actionEvent) {
         Window stage = mainMenu.getScene().getWindow();
-        File file = fileChooser.showOpenDialog(stage);
-        if (file != null) {
-            parserFileService.performFile(file, allEntries);
-        }
+        Optional<File> file = Optional.ofNullable(fileChooser.showOpenDialog(stage));
+        file.ifPresent((f) -> parserFileService.performFile(f, allEntries));
         filteredData = new FilteredList<>(allEntries);
         mainTable.setItems(filteredData);
         fltrChoiceThread.setItems(FXCollections.observableArrayList(threadContainer.getThreads()));
@@ -112,20 +111,21 @@ public class MainController {
 
     private void filterTable(Boolean checked, String level) {
         levelStatusFilter.put(level, checked);
-        filteredData.setPredicate((row) -> {
+        filteredData.setPredicate(this::filterEachRowByStatus);
+        mainTable.setItems(filteredData);
+    }
 
-            for (Map.Entry<String, Boolean> statusLevel : levelStatusFilter.entrySet()) {
-                if (row.getLevel() != null ) {
-                    if (statusLevel.getKey().equals(row.getLevel()) && statusLevel.getValue()) {
-                        return true;
-                    }
-                    continue;
+    private boolean filterEachRowByStatus(Entry row) {
+        for (Map.Entry<String, Boolean> statusLevel : levelStatusFilter.entrySet()) {
+            if (row.getLevel() != null ) {
+                if (statusLevel.getKey().equals(row.getLevel()) && statusLevel.getValue()) {
+                    return true;
                 }
-                return false;
+                continue;
             }
             return false;
-        });
-        mainTable.setItems(filteredData);
+        }
+        return false;
     }
 
     private void filterTableByThread(String thread) {
@@ -196,23 +196,28 @@ public class MainController {
         fltrLevelALL.selectedProperty().addListener((observable, oldValue, newValue) -> resetLevelFilter());
 
         fltrLevelERR.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            fltrLevelALL.setSelected(false);
+            if (fltrLevelALL.isSelected())
+                fltrLevelALL.setSelected(false);
             filterTable(newValue, "ERROR");
         });
         fltrLevelDEBUG.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            fltrLevelALL.setSelected(false);
+            if (fltrLevelALL.isSelected())
+                fltrLevelALL.setSelected(false);
             filterTable(newValue, "DEBUG");
         });
         fltrLevelINFO.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            fltrLevelALL.setSelected(false);
+            if (fltrLevelALL.isSelected())
+                fltrLevelALL.setSelected(false);
             filterTable(newValue, "INFO");
         });
         fltrLevelWARN.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            fltrLevelALL.setSelected(false);
+            if (fltrLevelALL.isSelected())
+                fltrLevelALL.setSelected(false);
             filterTable(newValue, "WARN");
         });
         fltrLevelTRACE.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            fltrLevelALL.setSelected(false);
+            if (fltrLevelALL.isSelected())
+                fltrLevelALL.setSelected(false);
             filterTable(newValue, "TRACE");
         });
     }

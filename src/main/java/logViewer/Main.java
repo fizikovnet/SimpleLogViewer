@@ -13,7 +13,6 @@ public class Main extends Application {
         Parent root = FXMLLoader.load(getClass().getResource("/main.fxml"));
         primaryStage.setTitle("Simple Log Viewer");
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("/main.css");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
