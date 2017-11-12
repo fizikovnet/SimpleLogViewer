@@ -1,5 +1,6 @@
 package logViewer.Controller;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
@@ -107,6 +108,10 @@ public class MainController {
         filteredData = new FilteredList<>(allEntries);
         mainTable.setItems(filteredData);
         fltrChoiceThread.setItems(FXCollections.observableArrayList(threadContainer.getThreads()));
+    }
+
+    public void exitApp(ActionEvent actionEvent) {
+        Platform.exit();
     }
 
     private void filterTable(Boolean checked, String level) {
