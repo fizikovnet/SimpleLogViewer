@@ -12,6 +12,7 @@ import javafx.stage.Window;
 import javafx.util.Callback;
 import jfxtras.scene.control.LocalDateTimeTextField;
 import logViewer.Containers.ThreadContainer;
+import logViewer.CustomPredicate;
 import logViewer.Model.Entry;
 import logViewer.Services.ParserFileService;
 
@@ -59,12 +60,13 @@ public class MainController {
 
     private ObservableList<Entry> allEntries = FXCollections.observableArrayList();
 
-    private HashMap<String, Boolean> levelStatusFilter = new HashMap<>();
+    public static HashMap<String, Boolean> levelStatusFilter = new HashMap<>();
     final FileChooser fileChooser = new FileChooser();
 
     public static AtomicInteger counter = new AtomicInteger(0);
     public static final ThreadContainer threadContainer = new ThreadContainer();
     private FilteredList<Entry> filteredData;
+    private final CustomPredicate globalPredicate = new CustomPredicate();
 
     ParserFileService parserFileService = new ParserFileService();
 
@@ -116,7 +118,8 @@ public class MainController {
 
     private void filterTable(Boolean checked, String level) {
         levelStatusFilter.put(level, checked);
-        filteredData.setPredicate(this::filterEachRowByStatus);
+        globalPredicate.updateLevelPredicate();
+        filteredData.setPredicate(globalPredicate::applyPredicate);
         mainTable.setItems(filteredData);
     }
 
@@ -134,17 +137,9 @@ public class MainController {
     }
 
     private void filterTableByThread(String thread) {
-        if (thread.equals("ALL")) {
-            mainTable.setItems(filteredData);
-        } else {
-            filteredData.setPredicate((row) -> {
-                if (row.getThread().equals(thread)) {
-                    return true;
-                }
-                return false;
-            });
-            mainTable.setItems(filteredData);
-        }
+        globalPredicate.updateThreadPredicate(thread);
+        filteredData.setPredicate(globalPredicate::applyPredicate);
+        mainTable.setItems(filteredData);
     }
 
     private void filterTableByAfterTime(String time) {
@@ -194,6 +189,7 @@ public class MainController {
         fltrLevelDEBUG.setSelected(false);
         fltrLevelINFO.setSelected(false);
         fltrLevelWARN.setSelected(false);
+        globalPredicate.resetLevelPredicate();
         mainTable.setItems(allEntries);
     }
 
